@@ -50,7 +50,12 @@ if __name__ == "__main__":
                         single_slice_point_cloud.append(single_point_XYZ)
 
     single_slice_point_cloud = np.asarray(single_slice_point_cloud, dtype=np.float32)
-    # print(single_slice_point_cloud.shape)
+
+    ''' below are two ways to color the points '''
+    # first way
+    pcd.colors = o3d.utility.Vector3dVector(np.tile(np.asarray([0.1, 0.3, 0.5]),((single_slice_point_cloud.shape)[0], 1)))
+    # second way
+    pcd.paint_uniform_color([0.5, 0.5, 0.5])
+
     pcd.points = o3d.utility.Vector3dVector(single_slice_point_cloud)
-    # pcd.colors = np.array(pcd.points.size())
     o3d.visualization.draw_geometries([pcd])
