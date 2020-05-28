@@ -7,57 +7,70 @@ import random
 import math
 pi = math.pi
 from matplotlib import pyplot as plt
+import scipy.io as io
 
 axis_pcd = o3d.create_mesh_coordinate_frame(size=0.1, origin=[0, 0, 0])
 
 rho = 0.015 * np.sqrt(np.random.uniform(0, 1, 1000))
 phi = np.random.uniform(0, 2*np.pi, 1000)
 
-# for x in range(0.04)
-x = 0.04 + rho * np.cos(phi)
-y = 0.16 + rho * np.sin(phi)
+x1 = 0.04 + rho * np.cos(phi)
+x2 = 0.13 + rho * np.cos(phi)
+x3 = 0.22 + rho * np.cos(phi)
+x4 = 0.32 + rho * np.cos(phi)
+
+y1 = 0.11 + rho * np.sin(phi)
+y2 = 0.16 + rho * np.sin(phi)
+y3 = 0.20 + rho * np.sin(phi)
+y4 = 0.21 + rho * np.sin(phi)
+y5 = 0.22 + rho * np.sin(phi)
 # plt.scatter(x, y)
 # plt.axis('equal')
 # plt.show()
 points = []
+
 ''' draw the straight lines'''
 # for z in range(0,250,2):
 #     z = z/1000
-#     for i in range(len(x)):
-#         points.append([x[i],y[i],z])
+#     for i in range(len(y1)):
+#         # points.append([x1[i],y1[i],z])
+#         points.append([x2[i],y2[i],z])
+#         points.append([x3[i],y1[i],z])
+#         # points.append([x4[i],y1[i],z])
+#         # points.append([x2[i],y1[i],z])
 
 ''' draw the inclined lines -- type 1 '''
-# for i in range(40,320,2):
-#     z = 25/28 * i - 250/7
-#     for j in range(len(y)):
-#         points.append([i/1000 + rho[j] * np.cos(phi[j]), y[j], z/1000])
-#
-# for i in range(40,320,2):
-#     z = -25/28 * i + 2000/7
-#     for j in range(len(y)):
-#         points.append([i/1000 + rho[j] * np.cos(phi[j]), y[j], z/1000])
+for i in range(40,320,2):
+    z = 25/28 * i - 250/7
+    for j in range(len(y1)):
+        points.append([i/1000 + rho[j] * np.cos(phi[j]), y2[j], z/1000])
+
+for i in range(40,320,2):
+    z = -25/28 * i + 2000/7
+    for j in range(len(y1)):
+        points.append([i/1000 + rho[j] * np.cos(phi[j]), y1[j], z/1000])
 
 ''' draw the inclined lines -- type 2 '''
 # for i in range(40,182,2):
 #     z = 25/14 * i - 500/7
-#     for j in range(len(y)):
-#         points.append([i/1000 + rho[j] * np.cos(phi[j]), y[j], z/1000])
+#     for j in range(len(y1)):
+#         points.append([i/1000 + rho[j] * np.cos(phi[j]), y2[j], z/1000])
 #
 # for i in range(180,322,2):
 #     z = -25/14 * i + 4000/7
-#     for j in range(len(y)):
-#         points.append([i/1000 + rho[j] * np.cos(phi[j]), y[j], z/1000])
+#     for j in range(len(y1)):
+#         points.append([i/1000 + rho[j] * np.cos(phi[j]), y1[j], z/1000])
 
 ''' draw the inclined lines -- type 3 '''
-for i in range(40,182,2):
-    z = -25/14 * i + 2250/7
-    for j in range(len(y)):
-        points.append([i/1000 + rho[j] * np.cos(phi[j]), y[j], z/1000])
-
-for i in range(180,322,2):
-    z = 25/14 * i - 2250/7
-    for j in range(len(y)):
-        points.append([i/1000 + rho[j] * np.cos(phi[j]), y[j], z/1000])
+# for i in range(40,182,2):
+#     z = -25/14 * i + 2250/7
+#     for j in range(len(y1)):
+#         points.append([i/1000 + rho[j] * np.cos(phi[j]), y1[j], z/1000])
+#
+# for i in range(180,322,2):
+#     z = 25/14 * i - 2250/7
+#     for j in range(len(y1)):
+#         points.append([i/1000 + rho[j] * np.cos(phi[j]), y2[j], z/1000])
 
 points = np.asarray(points, dtype=np.float32)
 pcd=o3d.geometry.PointCloud()
@@ -66,6 +79,10 @@ pcd.paint_uniform_color([0.1, 0.3, 0.5])
 vis = o3d.Visualizer()
 vis.add_geometry(axis_pcd)
 o3d.visualization.draw_geometries([pcd] + [axis_pcd])
+
+#Saving data to mat file
+mat_path='/home/jinglun/Code/gprMax/model_output/model_gt/51.mat'
+io.savemat(mat_path, {'scandata': points})
 # # 绘制open3d坐标系
 # axis_pcd = o3d.create_mesh_coordinate_frame(size=0.5, origin=[0, 0, 0])
 # # 在3D坐标上绘制点：坐标点[x,y,z]对应R，G，B颜色
